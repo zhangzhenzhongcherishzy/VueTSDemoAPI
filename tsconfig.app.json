@@ -1,10 +1,28 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  /*-------------新增编译配置------------*/
+  //该字段指定了 TypeScript 编译器应该包含哪些文件进行编译。这些文件可以是 TypeScript 文件、类型定义文件等
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue",
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx"
+  ],
+  /*-------------新增编译配置------------*/
+  //exclude：该字段指定了哪些文件或目录应该被排除在编译之外。通常用于排除不需要编译的测试文件、构建目录等
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
+    //这个选项启用 TypeScript 项目的增量编译功能，要求项目是一个 "项目引用"（Project Reference）。它通常用于多项目（例如包含多个子项目或库的 monorepo）中。开启增量编译可以提高编译速度。这个选项通常与项目引用配合使用
+    "composite": true,
+    // 指定 TypeScript 在增量编译时使用的构建信息文件的位置。./node_modules/.tmp/tsconfig.app.tsbuildinfo 是存储构建信息的路径，TypeScript 会在编译时保存和读取这个文件，以提高后续编译的效率
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-
+    //这个选项指定了类型声明文件的根目录。TypeScript 会从这些目录中查找 .d.ts 文件，用于补充类型信息 ./node_modules/@types：这是默认的类型根目录，通常存放第三方库的类型声明  ./src/types：这是你自己项目中定义的类型声明文件目录，通常用于你自己定义的全局类型或模块扩展
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    //这个选项指定了模块解析的基准路径。"." 表示当前项目的根目录。该选项常用于配置路径别名
+    "baseUrl": ".",
+    //这个配置用于设置模块路径的别名。在这个例子中，设置了 @/* 别名，表示当 TypeScript 在代码中遇到以 @/ 开头的路径时，它会将其解析为 ./src/*。这意味着你可以在项目中使用 @/ 作为 src 目录的简短别名。例如：@/components/MyComponent 会被解析为 ./src/components/MyComponent
     "paths": {
       "@/*": ["./src/*"]
     }
