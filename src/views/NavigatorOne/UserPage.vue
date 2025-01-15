@@ -2,7 +2,7 @@
   <div id="wrap">
     <h1>用户管理</h1>
     <el-table :data="userInfo" style="width: 100%" width="100%">
-      <el-table-column fixed prop="id" label="用户ID" width="100" />
+      <el-table-column fixed prop="id" label="用户ID" width="80" />
       <el-table-column prop="roleNames" label="权限登记" width="150" />
       <el-table-column prop="nickname" label="用户昵称" width="150" />
       <el-table-column prop="username" label="用户名" width="150" />
