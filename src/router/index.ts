@@ -10,7 +10,7 @@ const routesday20250113: Array<RouteRecordRaw> = [
       {
         path: '/SetPage',
         name: 'SetPage',
-        component: () => import('@/views/SetPage.vue'),
+        component: () => import('@/views/Components/SetPage.vue'),
         meta: { title: '系统管理' },
         children: [
           {
@@ -28,9 +28,21 @@ const routesday20250113: Array<RouteRecordRaw> = [
         ],
       },
       {
+        path: '/StatePage',
+        name: 'StatePage',
+        component: () => import('@/views/Components/StatePage.vue'),
+        meta: { title: '状态管理' },
+      },
+      {
+        path: '/ModifierPage',
+        name: 'ModifierPage',
+        component: () => import('@/views/Components/ModifierPage.vue'),
+        meta: { title: '作弊修改器' },
+      },
+      {
         path: '/AboutPage',
         name: 'AboutPage',
-        component: () => import('@/views/AboutPage.vue'),
+        component: () => import('@/views/Components/AboutPage.vue'),
         meta: { title: '关于我们' },
       },
     ],

@@ -17,6 +17,9 @@
           </el-col>
         </el-row>
       </el-header>
+      <!-- 分割线 -->
+      <el-divider />
+      <!-- 内容区域 -->
       <el-container>
         <!-- 侧边菜单栏 -->
         <el-aside width="200px">
@@ -51,6 +54,7 @@
                       v-for="sonItem in item.children"
                       :key="sonItem.name"
                     >
+                      <el-icon><location /></el-icon>
                       {{ sonItem!.meta?.title || sonItem.name }}
                     </el-menu-item>
                   </el-sub-menu>
@@ -62,19 +66,39 @@
         <!-- 主题main部分和页脚部分 -->
         <el-container>
           <el-main>
+            <!-- 面包屑 -->
+            <el-breadcrumb :separator-icon="ArrowRight">
+              <!-- 非最后一项的面包屑 -->
+              <el-breadcrumb-item
+                v-for="(route, index) in filteredBreadcrumbItems"
+                :key="index"
+                :to="route.path ? { path: route.path } : null"
+                :replace="true"
+              >
+                {{ route.meta?.title || route.name }}
+              </el-breadcrumb-item>
+              <!-- 最后一项的面包屑 -->
+              <el-breadcrumb-item>
+                {{ lastBreadcrumbItem?.meta?.title || lastBreadcrumbItem?.name }}
+              </el-breadcrumb-item>
+            </el-breadcrumb>
+            <!-- 内容区域 -->
             <el-scrollbar>
               <router-view>
                 <template #default="{ Component, route }">
                   <transition
-                    enter-active-class="animate__animated.animate__fadeInRight"
+                    enter-active-class="animate__animated animate__lightSpeedInLeft"
                     mode="out-in"
                   >
-                    <component :is="Component" :key="route.path" />
+                    <component v-if="Component" :is="Component" :key="route.path" />
                   </transition>
                 </template>
               </router-view>
             </el-scrollbar>
           </el-main>
+          <!-- 分割线 -->
+          <el-divider />
+          <!-- 页脚区域 -->
           <el-footer :class="{ 'el-footer-dark': isDark }">
             <div>@copy by 年后就暴富班 ©️2025</div>
           </el-footer>
@@ -84,6 +108,12 @@
   </div>
 </template>
 
+<!--
+下载指令：npm/cnpm/pnpm animate.css
+enter-active-class：定义进入动画的样式类，例如 animate__fadeInUp。
+leave-active-class：定义离开动画的样式类，例如 animate__fadeOutDown。
+mode：动画的模式，可以是 out-in（默认）、in-out、transition 等。
+-->
 <script lang="ts">
 export default {
   name: 'SetPage',
@@ -91,24 +121,36 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { Check, Delete, Edit, Message, Search, Star } from '@element-plus/icons-vue'
+import { ref, computed } from 'vue'
+import { Check, Delete, Edit, Message, Search, Star, ArrowRight } from '@element-plus/icons-vue'
 import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 //组合式函数库
 import { useDark } from '@vueuse/core'
 //侧边菜单栏
-import { Setting } from '@element-plus/icons-vue'
+import { Location, Setting } from '@element-plus/icons-vue'
 
 // 导入动态内容组件
 import { routerList } from '@/router/index'
+
+// 引入路由对象
+const router = useRouter()
+const route = useRoute()
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const routerLists = ref<any>(routerList[0].children)
-console.log(routerLists)
-// 使用路由做侧边导航栏
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// import { routerList } from '@/router/index'
-// const routerLists = ref<any[]>(routerList)
+
+// 动态生成面包屑数据
+// 计算属性：过滤掉最后一项的面包屑
+const filteredBreadcrumbItems = computed(() => {
+  const matched = route.matched || []
+  return matched.slice(0, -1) // 返回除最后一项以外的所有项
+})
+// 计算属性：获取最后一项
+const lastBreadcrumbItem = computed(() => {
+  const matched = route.matched || []
+  return matched[matched.length - 1] || null // 获取最后一项
+})
 
 //切换主题
 const isDark = useDark() // 是否处于暗模式
@@ -116,22 +158,19 @@ const toggleDarkMode = () => {
   isDark.value = !isDark.value
 }
 
-// 引入路由对象
-const router = useRouter()
-
 // 在组件加载时进行跳转
 onMounted(() => {
-  router.push({ name: 'RolePage' }) // 默认跳转到角色管理页面
+  router.push({ name: 'UserPage' }) // 默认跳转到角色管理页面
 })
 </script>
 
 <style lang="scss" scoped>
-.animate__animated.animate__fadeInRight {
-  --animate-duration: 0.2s;
-}
 .common-layout {
   width: 100%;
   height: 100%;
+}
+.el-divider {
+  margin: 0;
 }
 .el-container {
   height: 100%;

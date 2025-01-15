@@ -1,3 +1,5 @@
+//!使用动画库
+import 'animate.css'
 import './assets/main.scss';
 
 import { createApp } from 'vue'

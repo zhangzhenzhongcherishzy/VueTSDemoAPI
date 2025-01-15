@@ -77,11 +77,9 @@ instance.interceptors.response.use(
 
 // 服务请求
 export const service = <T = unknown>(config: AxiosRequestConfigEx): Promise<ResType<T>> => {
-  //instance.request: 使用 axios 的实例方法发送请求
   return instance
     .request<ResType<T>>(config)
     .then((response) => {
-      //response.data: 返回解析后的数据体
       return response.data
     })
     .catch((error) => {
@@ -101,41 +99,16 @@ export const requestGetRolesPage = (params: GetRolesPageParams) => {
     url: '/roles/page', // 请求的 URL
     params, // 查询参数,
   })
-
-  // return instance.request<ResType<PageDataType<RolesType>>>({
-  //   method: 'get',         // 指定请求方法
-  //   url: '/roles/page',         // 请求的 URL
-  //   params    // 查询参数
-  // })
-  //   .then(response => { return response.data })
-  // .catch(error => console.error(error));
 }
 
-//调用 requestGetRolesPage 查询第一页角色，每页 40 条，打印结果
-// const requestGetRolesPageHandler3 = async () => {
-//   const res = await requestGetRolesPage({ pageNum: 1, pageSize: 100 })
-//   console.log(res)
-//   // roles.value = res.data.list
-// }
 
-/**
- * 添加角色 @param data
- * @returns
- * 优化any类型报错问题：addRole 方法需要添加具体的类型。根据代码逻辑，data 是 RolesType 的一种形式，可以扩展定义一个接口；Omit 工具类型用于排除不需要的字段（如 id 和 createTime），因为新增时通常不传这些字段。
- */
+//添加角色 @param data
 export const addRole = (data: Omit<RolesType, 'id' | 'createTime'>) => {
   return service({
     method: 'post',
     url: '/roles',
     data,
   })
-  // return instance.request<ResType>({
-  //   method: 'post',
-  //   url: '/roles',
-  //   data,
-  // })
-  // .then(response => console.log(response.data))
-  // .catch(error => console.error(error));
 }
 
 /**
@@ -149,14 +122,6 @@ export const editRole = (roleId: string, data: Partial<RolesType>) => {
     url: `/roles/${roleId}`,
     data,
   })
-
-  // return instance.request<ResType>({
-  //   method: 'put',
-  //   url: `/roles/${roleId}`,
-  //   data,
-  // })
-  //   .then(response => console.log(response.data))
-  //   .catch(error => console.error(error));
 }
 
 /**
@@ -170,13 +135,6 @@ export const editRoleStaus = (roleId: string, status: number) => {
     url: `/roles/${roleId}/status`,
     params: { status },
   })
-  // return instance.request<ResType>({
-  //   method: 'patch',
-  //   url: `/roles/${roleId}/status`,
-  //   params: { status }
-  // })
-  //   .then(response => console.log(response.data))
-  //   .catch(error => console.error(error));
 }
 
 /**
@@ -266,5 +224,18 @@ export const apiUsersMe = () => {
   return service<IUsersMeData>({
     method: 'get',
     url: '/users/me',
+  })
+}
+
+
+/**
+ * 登录
+ * @param data
+ * @returns
+ */
+export const getusers = () => {
+  return service<IUsersMeData>({
+    method: 'get',
+    url: '/users/page?pageNum=1&pageSize=10',
   })
 }

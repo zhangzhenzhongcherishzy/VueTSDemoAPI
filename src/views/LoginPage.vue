@@ -17,12 +17,11 @@
 -->
 <template>
   <div id="wrap">
-    <h1>登录管理</h1>
-    <el-form :label-position="'left'" label-width="auto" :model="formData" style="max-width: 600px">
-      <el-form-item label="用户名">
+    <el-form id="RegisterBox" label-width="auto" :model="formData" style="max-width: 600px">
+      <el-form-item class="el-form-wrap">
         <el-input v-model="formData.username" />
       </el-form-item>
-      <el-form-item label="密码">
+      <el-form-item>
         <el-input v-model="formData.password" />
       </el-form-item>
       <el-form-item>
@@ -47,8 +46,8 @@ const router = useRouter()
 const route = useRoute()
 
 const formData: IUserLoginInfo = reactive({
-  username: '',
-  password: '',
+  username: 'admin',
+  password: '123456',
 })
 
 // 执行登录
@@ -100,7 +99,7 @@ function parseRedirect(): {
   console.log(queryParams)
 
   //遍历 URL 对象的查询参数（searchParams）。将每个参数的键值对存储到 queryParams 对象中。
-  console.log(url.searchParams);
+  console.log(url.searchParams)
 
   url.searchParams.forEach((value, key) => {
     queryParams[key] = value
@@ -109,3 +108,65 @@ function parseRedirect(): {
   return { path, queryParams }
 }
 </script>
+
+<style lang="scss" scoped>
+#wrap {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  .el-form {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30rem;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    .el-form-item {
+      width: 100%;
+      height: 3rem;
+      margin: 2rem 0;
+      .el-input {
+        height: 100%;
+        margin: auto;
+      }
+      .el-input::before{
+        font-size: 1.2rem;
+        line-height: 3rem;
+        font-weight: bold;
+        color: #409eff;
+      }
+      .el-input:nth-child(1)::before{
+        content: '账号：';
+      }
+      .el-input:nth-child(2)::before{
+        content: '密码：';
+      }
+      .el-button {
+        font-size: 1.2rem;
+        margin: auto;
+        width: 50%;
+        height: 100%;
+      }
+    }
+  }
+}
+#wrap::before {
+  z-index: -1;
+  top: 0;
+  left: 0;
+  content: '';
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  filter: blur(9px);
+  background: url('@/assets/images/6.png') center center/cover no-repeat;
+  position: fixed;
+}
+</style>
