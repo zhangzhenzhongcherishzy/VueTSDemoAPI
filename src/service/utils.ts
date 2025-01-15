@@ -59,7 +59,6 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response) => {
     // 响应成功时做一些处理
-    // console.log('响应拦截器: ', response)
     return response
   },
   (error) => {
@@ -75,7 +74,7 @@ instance.interceptors.response.use(
   },
 )
 
-// 服务请求
+//!axios实例请求封装
 export const service = <T = unknown>(config: AxiosRequestConfigEx): Promise<ResType<T>> => {
   return instance
     .request<ResType<T>>(config)
@@ -88,11 +87,11 @@ export const service = <T = unknown>(config: AxiosRequestConfigEx): Promise<ResT
     })
 }
 
+//!get角色分页列表
 interface GetRolesPageParams {
   pageNum: number
   pageSize: number
 }
-// 角色分页列表
 export const requestGetRolesPage = (params: GetRolesPageParams) => {
   return service<PageDataType<RolesType>>({
     method: 'get', // 指定请求方法
@@ -101,8 +100,7 @@ export const requestGetRolesPage = (params: GetRolesPageParams) => {
   })
 }
 
-
-//添加角色 @param data
+//!post添加角色
 export const addRole = (data: Omit<RolesType, 'id' | 'createTime'>) => {
   return service({
     method: 'post',
@@ -111,24 +109,16 @@ export const addRole = (data: Omit<RolesType, 'id' | 'createTime'>) => {
   })
 }
 
-/**
- * 修改角色的数据
- * @param data
- * @returns
- */
+//!put修改角色的数据
 export const editRole = (roleId: string, data: Partial<RolesType>) => {
-  service({
+  return service({
     method: 'put',
     url: `/roles/${roleId}`,
     data,
   })
 }
 
-/**
- * 修改角色的状态
- * @param data
- * @returns
- */
+//!patch修改角色的状态
 export const editRoleStaus = (roleId: string, status: number) => {
   return service({
     method: 'patch',
@@ -137,89 +127,55 @@ export const editRoleStaus = (roleId: string, status: number) => {
   })
 }
 
-/**
- * 删除角色
- * @param ids
- */
+//!delete删除角色
 export const delRole = (ids: string) => {
-  instance
+  return instance
     .request({
       method: 'delete',
       url: `/roles/${ids}`,
     })
-    .then((response) => console.log('Deleted:', response.data))
-    .catch((error) => console.error(error))
 }
 
+//!post账号验证登录
+//用户密码用户名接口
 export interface IUserLoginInfo {
-  /**
-   * 密码
-   */
   password: string
-  /**
-   * 用户名
-   */
   username: string
 }
-
-/**
- * 登录
- * @param data
- * @returns
- */
 export const apiLogin = (data: IUserLoginInfo) => {
   return service<string>({
     method: 'post',
     url: '/auth/login',
-    data
+    data,
   })
 }
 
+//!注册用户账号接口
 export interface IUsersMeData {
-  /**
-   * 头像
-   */
+  //头像
   avatar: string
   create_by: number
   dept_id: number
-  /**
-   * 邮箱
-   */
+  //邮箱
   email: string
-  /**
-   * 性别
-   */
+  //性别
   gender: number
   id: number
   is_deleted: number
-  /**
-   * 手机号
-   */
+  //手机号
   mobile: string
-  /**
-   * 昵称
-   */
+  //昵称
   nickname: string
-  /**
-   * 密码
-   */
+  //密码
   password: string
-  /**
-   * 状态
-   */
+  //状态
   status: number
   update_by: number
-  /**
-   * 用户名
-   */
+  //用户名
   username: string
 }
 
-/**
- * 登录
- * @param data
- * @returns
- */
+//!get获取登录权限
 export const apiUsersMe = () => {
   return service<IUsersMeData>({
     method: 'get',
@@ -227,12 +183,7 @@ export const apiUsersMe = () => {
   })
 }
 
-
-/**
- * 登录
- * @param data
- * @returns
- */
+//!get登录获取用户列表信息
 export const getusers = () => {
   return service<IUsersMeData>({
     method: 'get',

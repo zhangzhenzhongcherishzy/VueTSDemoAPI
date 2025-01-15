@@ -160,7 +160,7 @@ const toggleDarkMode = () => {
 
 // 在组件加载时进行跳转
 onMounted(() => {
-  router.push({ name: 'UserPage' }) // 默认跳转到角色管理页面
+  router.push({ name: 'RolePage' }) // 默认跳转到角色管理页面
 })
 </script>
 

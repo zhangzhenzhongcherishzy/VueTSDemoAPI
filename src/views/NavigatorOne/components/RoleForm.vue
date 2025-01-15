@@ -44,9 +44,9 @@
 </template>
 
 <script setup lang="ts">
-import { type RolesType, requestGetRolesPage, addRole, editRole } from '@/service/utils'
+import { type RolesType} from '@/service/utils'
 import { reactive, ref, watch } from 'vue'
-import { ElMessage, type ComponentSize, type FormInstance, type FormRules } from 'element-plus'
+import { type ComponentSize, type FormInstance, type FormRules } from 'element-plus'
 
 const ruleFormRef = ref<FormInstance>()
 
