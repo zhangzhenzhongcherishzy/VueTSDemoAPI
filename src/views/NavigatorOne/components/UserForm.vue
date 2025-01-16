@@ -1,16 +1,16 @@
 <template>
   <div id="wrap">
-    <h1>关于我们</h1>
+    <h1>用户权限</h1>
     <img :src="imgSrc" alt="" />
   </div>
 </template>
 
 <script lang="ts">
 export default {
-  name: 'AboutPage',
+  name: 'UserForm',
 }
 </script>
-  
+
 <script lang="ts" setup>
 import imgSrc from '@/assets/images/6.png'
 </script>

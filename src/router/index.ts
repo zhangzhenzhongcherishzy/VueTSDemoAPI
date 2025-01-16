@@ -18,6 +18,14 @@ const routesday20250113: Array<RouteRecordRaw> = [
             name: 'UserPage',
             component: () => import('@/views/NavigatorOne/UserPage.vue'),
             meta: { title: '用户管理' },
+            children: [
+              {
+                path: 'UserPage',
+                name: 'UserForm',
+                component: () => import('@/views/NavigatorOne/components/UserForm.vue'),
+                meta: { title: '用户权限' },
+              },
+            ],
           },
           {
             path: 'RolePage',

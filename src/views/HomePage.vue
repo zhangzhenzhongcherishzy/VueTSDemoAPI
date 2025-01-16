@@ -43,20 +43,44 @@
                   </el-menu-item>
                 </template>
                 <!-- 有子菜单栏的显示情况 -->
+                <!-- 有子菜单栏的显示情况 -->
                 <template v-else>
                   <el-sub-menu :index="item.path" :key="item.name">
                     <template #title>
                       <el-icon><setting /></el-icon>
                       {{ item!.meta?.title || item.name }}
                     </template>
-                    <el-menu-item
-                      :index="`${item.path}/${sonItem.path}`"
-                      v-for="sonItem in item.children"
-                      :key="sonItem.name"
-                    >
-                      <el-icon><location /></el-icon>
-                      {{ sonItem!.meta?.title || sonItem.name }}
-                    </el-menu-item>
+                    <!-- 遍历子菜单 -->
+                    <template v-for="sonItem in item.children" :key="sonItem.name">
+                      <template v-if="!sonItem.children || !sonItem.children.length">
+                        <!-- 没有孙级菜单 -->
+                        <el-menu-item :index="`${item.path}/${sonItem.path}`">
+                          <el-icon><location /></el-icon>
+                          {{ sonItem!.meta?.title || sonItem.name }}
+                        </el-menu-item>
+                      </template>
+                      <template v-else>
+                        <!-- 有孙级菜单 -->
+                        <el-sub-menu :index="`${item.path}/${sonItem.path}`" :key="sonItem.name">
+                          <template #title>
+                            <el-icon><location /></el-icon>
+                            {{ sonItem!.meta?.title || sonItem.name }}
+                          </template>
+                          <!-- 遍历孙级菜单 -->
+                          <template
+                            v-for="grandsonItem in sonItem.children"
+                            :key="grandsonItem.name"
+                          >
+                            <el-menu-item
+                              :index="`${item.path}/${sonItem.path}/${grandsonItem.path}`"
+                            >
+                              <el-icon><location /></el-icon>
+                              {{ grandsonItem!.meta?.title || grandsonItem.name }}
+                            </el-menu-item>
+                          </template>
+                        </el-sub-menu>
+                      </template>
+                    </template>
                   </el-sub-menu>
                 </template>
               </template>
@@ -144,7 +168,12 @@ const routerLists = ref<any>(routerList[0].children)
 // 计算属性：过滤掉最后一项的面包屑
 const filteredBreadcrumbItems = computed(() => {
   const matched = route.matched || []
-  return matched.slice(0, -1) // 返回除最后一项以外的所有项
+  //找到路径中第一个以 '/SetPage' 开头的匹配项的索引
+  const startIndex = matched.findIndex((item) => item.path === '/SetPage')
+  if (startIndex !== -1) {
+    return matched.slice(startIndex, -1) // 从 '/SetPage' 开始过滤，排除最后一项
+  }
+  return []
 })
 // 计算属性：获取最后一项
 const lastBreadcrumbItem = computed(() => {

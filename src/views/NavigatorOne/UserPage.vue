@@ -37,7 +37,7 @@ const sendGetUserInfo = async () => {
     if (res.code !== '2000') {
       throw new Error(res.msg)
     }
-    console.log(res.data.list)
+    // console.log(res.data.list)
     userInfo.value = res.data.list
   } catch (e: unknown) {
     if (e instanceof Error) {
