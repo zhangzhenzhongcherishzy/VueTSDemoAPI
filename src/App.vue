@@ -5,5 +5,5 @@ import { RouterView } from 'vue-router'
 <template>
   <RouterView />
 </template>
-
+<!-- HarmonyOS测试更新 -->
 <style scoped></style>
